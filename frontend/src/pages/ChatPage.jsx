@@ -91,12 +91,18 @@ export default function ChatPage() {
   useEffect(() => {
     if (id) {
       fetchMessages(id);
+    } else if (location.state?.isNewChat) {
+      // Explicitly triggered new chat (sidebar or in-page button)
+      useChatStore.getState().startNewChat();
+      setInputMessage('');
+      setHasSentInitial(false);
+      fetchConversations();
     } else if (!location.state?.initialMessage) {
       // No ID and no initial message → show chat history
       useChatStore.getState().startNewChat();
       fetchConversations();
     }
-  }, [id]);
+  }, [id, location.state?.isNewChat, location.state?.ts]);
 
   // Sync mode from loaded conversation
   useEffect(() => {
@@ -154,8 +160,7 @@ export default function ChatPage() {
 
   const handleStartNewChat = () => {
     useChatStore.getState().startNewChat();
-    navigate('/chat', { state: { initialMode: 'talk', isNewChat: true } });
-    // Force a fresh new conversation view by navigating to a "new chat" mode
+    navigate('/chat', { state: { isNewChat: true, ts: Date.now() } });
     setInputMessage('');
     setSelectedMode('talk');
   };
@@ -205,8 +210,8 @@ export default function ChatPage() {
     'Company specific',
   ];
 
-  // ─── CHAT HISTORY VIEW (no conversation ID, no initial message) ───
-  const showHistoryView = !id && !location.state?.initialMessage && !isStreaming && messages.length === 0;
+  // ─── CHAT HISTORY VIEW (no conversation ID, no initial message, not a fresh new chat) ───
+  const showHistoryView = !id && !location.state?.initialMessage && !location.state?.isNewChat && !isStreaming && messages.length === 0;
 
   if (showHistoryView) {
     const filteredConversations = (conversations || []).filter((c) => {

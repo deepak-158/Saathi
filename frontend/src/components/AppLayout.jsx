@@ -31,7 +31,7 @@ export default function AppLayout({ children, onOpenCrisisModal }) {
 
   const handleNewChat = () => {
     startNewChat();
-    navigate('/chat');
+    navigate('/chat', { state: { isNewChat: true, ts: Date.now() } });
     setMobileMenuOpen(false);
   };
 
