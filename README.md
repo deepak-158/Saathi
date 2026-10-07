@@ -96,14 +96,20 @@ Runs unit tests for crisis & distress detection, input validation, and helper ut
 
 ---
 
-## 📦 Production Build & Deployment
+## 📦 Production Deployment
 
-- **Frontend Build**:
-  ```bash
-  cd saathi/frontend
-  npm run build
-  ```
-  Generates production bundle in `dist/`. Ready for deployment to Vercel (configured via `vercel.json`).
+### 1. Frontend on Vercel
+The frontend is configured for instant deployment on [Vercel](https://vercel.com):
+1. Import your GitHub repository (`deepak-158/Saathi`) into Vercel.
+2. In the project setup:
+   - **Root Directory**: `frontend` (or select `frontend` if importing monorepo)
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Add Environment Variable:
+   - `VITE_API_URL`: Your deployed backend API URL (e.g., `https://your-backend.onrender.com/api` or `http://<EC2_IP>:5000/api`)
+4. Click **Deploy**. Vercel SPA routing is already configured in `vercel.json` to handle client-side routing seamlessly.
 
-- **Backend Deployment**:
-  Configured for Render / Railway via `render.yaml`.
+### 2. Backend Deployment
+- **Render / Railway**: Configured via `render.yaml` or Docker/Node service.
+- **AWS EC2**: Supported via PM2 process manager and Nginx reverse proxy with SSE streaming.

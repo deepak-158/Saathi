@@ -36,6 +36,7 @@ app.use(cors({
       !origin || 
       allowedOrigins.includes(origin) || 
       (env.nodeEnv === 'development' && origin.includes('localhost')) ||
+      origin.endsWith('.vercel.app') ||
       origin.endsWith('.amplifyapp.com')
     ) {
       return callback(null, true);
