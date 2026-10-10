@@ -9,7 +9,11 @@ import {
   ArrowRight, 
   RotateCw, 
   Quote,
-  Smile
+  Smile,
+  Sun,
+  Coffee,
+  Cloud,
+  Activity
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import useChatStore from '../store/chatStore';
@@ -193,11 +197,11 @@ export default function DashboardPage() {
   };
 
   const moods = [
-    { id: 'good', label: 'Good', emoji: '😄', color: 'bg-[#FEF3C7]/90 border-amber-200 text-amber-900 hover:bg-[#FDE68A]' },
-    { id: 'okay', label: 'Okay', emoji: '🙂', color: 'bg-[#E0F2FE]/90 border-sky-200 text-sky-900 hover:bg-[#BAE6FD]' },
-    { id: 'meh', label: 'Meh', emoji: '😐', color: 'bg-[#FFEDD5]/90 border-orange-200 text-orange-900 hover:bg-[#FED7AA]' },
-    { id: 'low', label: 'Low', emoji: '🙁', color: 'bg-[#FFE4E6]/90 border-rose-200 text-rose-900 hover:bg-[#FECDD3]' },
-    { id: 'stressed', label: 'Stressed', emoji: '😰', color: 'bg-[#FEE2E2]/90 border-red-200 text-red-900 hover:bg-[#FECACA]' },
+    { id: 'good', label: 'Good', icon: Sun, color: 'bg-amber-50/80 border-amber-200/80 text-amber-900 hover:bg-amber-100/70' },
+    { id: 'okay', label: 'Okay', icon: Smile, color: 'bg-sky-50/80 border-sky-200/80 text-sky-900 hover:bg-sky-100/70' },
+    { id: 'meh', label: 'Meh', icon: Coffee, color: 'bg-orange-50/80 border-orange-200/80 text-orange-900 hover:bg-orange-100/70' },
+    { id: 'low', label: 'Low', icon: Cloud, color: 'bg-rose-50/80 border-rose-200/80 text-rose-900 hover:bg-rose-100/70' },
+    { id: 'stressed', label: 'Stressed', icon: Activity, color: 'bg-purple-50/80 border-purple-200/80 text-purple-900 hover:bg-purple-100/70' },
   ];
 
   const handleStartQuickChat = (action) => {
@@ -218,7 +222,7 @@ export default function DashboardPage() {
       mode: 'talk',
       prompt: "Hey Saathi, I just want to talk and share what's on my mind today.",
       icon: MessageCircle,
-      iconColor: 'bg-purple-100 text-purple-700',
+      iconColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
     },
     {
       title: 'Placement Help',
@@ -226,7 +230,7 @@ export default function DashboardPage() {
       mode: 'placement',
       prompt: "Hey Saathi, I need help with placement prep — technical interviews, DSA, and resume feedback.",
       icon: Briefcase,
-      iconColor: 'bg-blue-100 text-blue-700',
+      iconColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
     },
     {
       title: 'Study With Me',
@@ -234,15 +238,7 @@ export default function DashboardPage() {
       mode: 'study',
       prompt: "Hey Saathi, can you help me study, understand complex concepts, and build a study plan?",
       icon: BookOpen,
-      iconColor: 'bg-teal-100 text-teal-700',
-    },
-    {
-      title: 'Career Guidance',
-      desc: 'Choose path, skills, projects',
-      mode: 'career',
-      prompt: "Hey Saathi, I need career guidance on choosing technologies, project ideas, and career paths.",
-      icon: Compass,
-      iconColor: 'bg-amber-100 text-amber-700',
+      iconColor: 'bg-teal-50 text-teal-700 border border-teal-200/60',
     },
   ];
 
@@ -251,16 +247,22 @@ export default function DashboardPage() {
     ? currentMoodData.quotes[quoteIndex % currentMoodData.quotes.length]
     : null;
 
+  const currentMoodObj = moods.find((m) => m.id === selectedMood);
+  const CurrentMoodIcon = currentMoodObj?.icon || Smile;
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-8 space-y-8 font-sans">
-      {/* Top Header matching Screen 4 */}
+      {/* Top Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <span>Hey {user?.name?.split(' ')[0] || 'there'}</span>
-            <span className="text-2xl">👋</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Daily Companion</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+            Hey {user?.name?.split(' ')[0] || 'there'}
           </h1>
-          <p className="text-sm font-semibold text-slate-600 mt-1">
+          <p className="text-sm font-medium text-slate-600 mt-1">
             {selectedMood ? "Here's your thought for today" : "How are you feeling today?"}
           </p>
         </div>
@@ -279,17 +281,20 @@ export default function DashboardPage() {
         {!selectedMood ? (
           /* Mood Selector Cards - Shown when no mood is selected yet */
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 transition-all duration-300">
-            {moods.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => handleMoodSelect(m.id)}
-                className={`p-4 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1.5 shadow-2xs cursor-pointer ${m.color} hover:scale-[1.02] active:scale-[0.98]`}
-              >
-                <span className="text-2xl">{m.emoji}</span>
-                <span className="text-xs font-bold">{m.label}</span>
-              </button>
-            ))}
+            {moods.map((m) => {
+              const IconComponent = m.icon;
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => handleMoodSelect(m.id)}
+                  className={`p-4 rounded-2xl border transition-all flex flex-col items-center justify-center gap-2 shadow-2xs cursor-pointer ${m.color} hover:scale-[1.02] active:scale-[0.98]`}
+                >
+                  <IconComponent className="w-5 h-5" />
+                  <span className="text-xs font-bold">{m.label}</span>
+                </button>
+              );
+            })}
           </div>
         ) : (
           /* In-place Related Quote Card - Replaces the mood selector once chosen */
@@ -298,8 +303,8 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${currentMoodData.badgeColor}`}>
-                    <span>{moods.find((m) => m.id === selectedMood)?.emoji}</span>
-                    <span>{moods.find((m) => m.id === selectedMood)?.label} • {currentMoodData.badge}</span>
+                    <CurrentMoodIcon className="w-3.5 h-3.5" />
+                    <span>{currentMoodObj?.label} • {currentMoodData.badge}</span>
                   </span>
                   <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">Daily Thought</span>
                 </div>
@@ -375,7 +380,7 @@ export default function DashboardPage() {
       {/* Quick Actions Grid matching Screen 4 */}
       <div className="space-y-3.5">
         <h2 className="text-sm font-bold text-slate-900">Quick Actions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {quickActions.map((action, idx) => {
             const Icon = action.icon;
             return (

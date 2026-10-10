@@ -24,9 +24,9 @@ async function seed() {
         skills: ['C++', 'Python', 'React', 'Data Structures & Algorithms'],
         onboardingComplete: true,
       });
-      console.log('✅ Demo student user created: rahul.student@example.com / student123');
+      console.log('[OK] Demo student user created: rahul.student@example.com / student123');
     } else {
-      console.log('ℹ️ Demo student already exists.');
+      console.log('[INFO] Demo student already exists.');
     }
 
     // 2. Seed initial memories if none exist
@@ -58,7 +58,7 @@ async function seed() {
           importance: 6,
         },
       ]);
-      console.log('✅ Seeded 4 initial memories for Rahul.');
+      console.log('[OK] Seeded 4 initial memories for Rahul.');
     }
 
     // 3. Seed initial goal if none exist
@@ -77,7 +77,7 @@ async function seed() {
           { title: 'Participate in 2 weekly LeetCode contests', completed: false },
         ],
       });
-      console.log('✅ Seeded initial placement goal for Rahul.');
+      console.log('[OK] Seeded initial placement goal for Rahul.');
     }
 
     // 4. Seed initial wellness check-in if none exist
@@ -89,13 +89,13 @@ async function seed() {
         reason: 'placement',
         note: 'Solved 2 medium DP problems today and attended afternoon classes on time.',
       });
-      console.log('✅ Seeded initial check-in for Rahul.');
+      console.log('[OK] Seeded initial check-in for Rahul.');
     }
 
-    console.log('🎉 Seeding completed successfully!');
+    console.log('Seeding completed successfully!');
     await mongoose.disconnect();
   } catch (err) {
-    console.error('❌ Seeding error:', err);
+    console.error('[ERROR] Seeding error:', err);
     process.exit(1);
   }
 }

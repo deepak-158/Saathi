@@ -5,7 +5,12 @@ import {
   CheckCircle2, 
   Sparkles, 
   Calendar, 
-  Loader2 
+  Loader2,
+  Sun,
+  Smile,
+  Coffee,
+  Cloud,
+  Activity
 } from 'lucide-react';
 import { checkinAPI } from '../services/api';
 import toast from 'react-hot-toast';
@@ -64,11 +69,11 @@ export default function CheckInPage({ onOpenCrisisModal }) {
   };
 
   const moods = [
-    { id: 'good', label: 'Good', emoji: '😄', color: 'bg-[#FEF3C7]/90 border-amber-200 text-amber-900' },
-    { id: 'okay', label: 'Okay', emoji: '🙂', color: 'bg-[#E0F2FE]/90 border-sky-200 text-sky-900' },
-    { id: 'meh', label: 'Meh', emoji: '😐', color: 'bg-[#FFEDD5]/90 border-orange-200 text-orange-900' },
-    { id: 'low', label: 'Low', emoji: '🙁', color: 'bg-[#FFE4E6]/90 border-rose-200 text-rose-900' },
-    { id: 'stressed', label: 'Stressed', emoji: '😰', color: 'bg-[#FEE2E2]/90 border-red-200 text-red-900' },
+    { id: 'good', label: 'Good', icon: Sun, color: 'bg-amber-50/80 border-amber-200/80 text-amber-900' },
+    { id: 'okay', label: 'Okay', icon: Smile, color: 'bg-sky-50/80 border-sky-200/80 text-sky-900' },
+    { id: 'meh', label: 'Meh', icon: Coffee, color: 'bg-orange-50/80 border-orange-200/80 text-orange-900' },
+    { id: 'low', label: 'Low', icon: Cloud, color: 'bg-rose-50/80 border-rose-200/80 text-rose-900' },
+    { id: 'stressed', label: 'Stressed', icon: Activity, color: 'bg-purple-50/80 border-purple-200/80 text-purple-900' },
   ];
 
   const tagOptions = [
@@ -100,7 +105,7 @@ export default function CheckInPage({ onOpenCrisisModal }) {
         {onOpenCrisisModal && (
           <button
             onClick={onOpenCrisisModal}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold hover:bg-rose-100 transition-colors self-start sm:self-auto"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold hover:bg-rose-100 transition-colors self-start sm:self-auto cursor-pointer"
           >
             <LifeBuoy className="w-3.5 h-3.5" />
             <span>24/7 Helplines</span>
@@ -115,20 +120,21 @@ export default function CheckInPage({ onOpenCrisisModal }) {
             <h2 className="text-sm font-bold text-slate-900">How are you feeling right now?</h2>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Mood buttons matching Screen 4 */}
+              {/* Mood buttons */}
               <div className="grid grid-cols-5 gap-2">
                 {moods.map((m) => {
                   const isSelected = selectedMood === m.id;
+                  const IconComp = m.icon;
                   return (
                     <button
                       key={m.id}
                       type="button"
                       onClick={() => setSelectedMood(m.id)}
-                      className={`p-3 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 ${m.color} ${
+                      className={`p-3 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1.5 cursor-pointer ${m.color} ${
                         isSelected ? 'ring-2 ring-indigo-500 ring-offset-2 scale-[1.03]' : ''
                       }`}
                     >
-                      <span className="text-xl">{m.emoji}</span>
+                      <IconComp className="w-5 h-5" />
                       <span className="text-[10px] font-bold">{m.label}</span>
                     </button>
                   );
@@ -218,6 +224,7 @@ export default function CheckInPage({ onOpenCrisisModal }) {
               <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
                 {checkins.map((item) => {
                   const moodObj = moods.find((m) => m.id === item.mood) || moods[0];
+                  const HistoryIcon = moodObj.icon;
                   return (
                     <div
                       key={item._id}
@@ -225,7 +232,7 @@ export default function CheckInPage({ onOpenCrisisModal }) {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-base">{moodObj.emoji}</span>
+                          <HistoryIcon className="w-4 h-4" />
                           <span className="font-bold text-slate-800 capitalize">{item.mood}</span>
                         </div>
                         <span className="text-[10px] text-slate-400">

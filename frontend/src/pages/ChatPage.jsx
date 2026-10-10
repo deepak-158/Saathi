@@ -14,7 +14,10 @@ import {
   MessageSquare,
   Plus,
   Search,
-  ArrowRight
+  ArrowRight,
+  Briefcase,
+  BookOpen,
+  MessageCircle
 } from 'lucide-react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import useChatStore from '../store/chatStore';
@@ -169,37 +172,26 @@ export default function ChatPage() {
     { id: 'talk', label: 'Dost Mode' },
     { id: 'placement', label: 'Placement Mode' },
     { id: 'study', label: 'Academic Mode' },
-    { id: 'career', label: 'Career Guidance' },
-    { id: 'motivation', label: 'Motivation Mode' },
-    { id: 'strict', label: 'Strict Mentor' },
   ];
 
   const getModeLabel = (mId) => {
     if (mId === 'talk') return 'Dost Mode';
-    if (mId === 'placement') return 'Placement Mode';
+    if (mId === 'placement' || mId === 'career') return 'Placement Mode';
     if (mId === 'study' || mId === 'tutor') return 'Academic Mode';
-    if (mId === 'career') return 'Career Guidance';
-    if (mId === 'motivation') return 'Motivation Mode';
-    if (mId === 'strict') return 'Strict Mentor';
-    return modes.find((m) => m.id === mId)?.label || 'Dost Mode';
+    return 'Dost Mode';
   };
 
   const getChatModeBadge = (mode) => {
     switch (mode) {
       case 'placement':
-        return { label: 'Placement', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: '💼' };
+      case 'career':
+        return { label: 'Placement', color: 'bg-blue-50 text-blue-700 border-blue-200', Icon: Briefcase };
       case 'study':
       case 'tutor':
-        return { label: 'Academic', color: 'bg-teal-50 text-teal-700 border-teal-200', icon: '📚' };
-      case 'career':
-        return { label: 'Career', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: '🧭' };
-      case 'strict':
-        return { label: 'Strict Mentor', color: 'bg-purple-50 text-purple-700 border-purple-200', icon: '⚡' };
-      case 'motivation':
-        return { label: 'Motivation', color: 'bg-rose-50 text-rose-700 border-rose-200', icon: '🔥' };
+        return { label: 'Academic', color: 'bg-teal-50 text-teal-700 border-teal-200', Icon: BookOpen };
       case 'talk':
       default:
-        return { label: 'Dost', color: 'bg-indigo-50 text-indigo-700 border-indigo-200', icon: '💬' };
+        return { label: 'Dost', color: 'bg-indigo-50 text-indigo-700 border-indigo-200', Icon: MessageCircle };
     }
   };
 
@@ -272,8 +264,8 @@ export default function ChatPage() {
                     className="p-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors group cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className={`w-10 h-10 rounded-xl border ${badge.color} flex items-center justify-center text-base shrink-0`}>
-                        {badge.icon}
+                      <div className={`w-10 h-10 rounded-xl border ${badge.color} flex items-center justify-center shrink-0`}>
+                        <badge.Icon className="w-5 h-5" />
                       </div>
                       <div className="min-w-0">
                         <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">
